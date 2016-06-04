@@ -1,11 +1,20 @@
 package in.smartlight.device.controller;
 
 import javax.annotation.PostConstruct;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import org.glassfish.jersey.client.ClientConfig;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import in.smartlight.device.bean.Action;
 import in.smartlight.device.bean.Phase;
@@ -19,6 +28,8 @@ public class SmartLightController {
 	private Action allAction;
 	private Action action1;
 	private Action action2;
+	private String sunrise;
+	private String sunset;
 	
 	@RequestMapping("/default")
 	public String greetInHindi(ModelMap map){
@@ -28,6 +39,8 @@ public class SmartLightController {
 		map.addAttribute("allAction", allAction);
 		map.addAttribute("action1", action1);
 		map.addAttribute("action2", action2);
+		map.addAttribute("sunrise", sunrise);
+		map.addAttribute("sunset", sunset);
 		return "index";
 	}
 	
@@ -44,7 +57,25 @@ public class SmartLightController {
 	}
 
 	private void getSunRiseSet() {
+		Client client = ClientBuilder.newClient(new ClientConfig().register(String.class));
+		WebTarget webTarget = client.target("http://api.sunrise-sunset.org/json").queryParam("lat", 28.569762).queryParam("lng", 77.358981);
 		
+		Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON).accept("application/json");
+		Response response = invocationBuilder.get();
+
+		String strResponse = response.readEntity(String.class);
+		
+		JSONParser jsonParser = new JSONParser();
+		JSONObject jsonObject;
+		try {
+			jsonObject = (JSONObject) jsonParser.parse(strResponse);
+			JSONObject jsonResult = (JSONObject)jsonObject.get("results");
+			sunrise = (String)jsonResult.get("sunrise");
+			sunset = (String)jsonResult.get("sunset");
+			System.out.println(jsonObject.toJSONString());
+		}catch (ParseException e) {
+			System.out.println(e.getMessage());
+		}
 		
 	}
 

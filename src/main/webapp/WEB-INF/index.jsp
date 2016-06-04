@@ -37,7 +37,7 @@
 	<div class="col-lg-6">
 		<form action="#" id="form1" onsubmit="">
 			<div class="panel panel-primary">
-			<div class="panel-heading"><b>Actions Light On/Off</b></div>
+			<div class="panel-heading"><b>Light On/Off</b></div>
 				<div class="panel-body">
 				<p style=" margin-left:15px;"><input type="checkbox" name="sunrise" value="onoff">&nbsp;On/Off According to Sunrise and Sunset</p>
 					<div class="col-lg-6">
@@ -57,7 +57,7 @@
 		
 		<form action="#" id="form1" onsubmit="">
 					<div class="panel panel-primary">
-			<div class="panel-heading"><b>Light On/Off</b></div>
+			<div class="panel-heading"><b>Intensity Of Light</b></div>
 				<div class="panel-body">
 	
 				
@@ -69,11 +69,12 @@
 					<option value="phase2">Phase 2</option>
 				</select>
 			
-			<label class="font-noraml">Select Time</label>
-				<select class="form-control" >
-					<option value="10sec">10</option>
-					<option value="20sec">20</option>
-					<option value="30sec">30</option>
+			<label class="font-noraml">Select Intensity Percentage</label>
+				<select class="form-control">
+					<option value="100">100</option>
+					<option value="75">75</option>
+					<option value="50">50</option>
+					<option value="25">50</option>
 				</select>
 							</div>
 					<div class="col-lg-6">
@@ -93,18 +94,16 @@
 			<ul class="list-group clear-list m-t">
                             <li class="list-group-item fist-item">
                                 <span class="pull-right">
-                                    09:00 pm	
+                                    ${sunrise}	
                                 </span>Sunrise
                             </li>
                             <li class="list-group-item">
                                 <span class="pull-right">
-                                    07:16 am
+                                    ${sunset}
                                 </span>Sunset
                             </li>
                             <li class="list-group-item">
-                                <span class="pull-right">
-                                    06:22 pm
-                                </span>Some alert message.
+                                Phase 3 is not working!!!
                             </li>
 
                            
