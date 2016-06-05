@@ -1,6 +1,7 @@
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<!DOCTYPE html>
-<html>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+ pageEncoding="ISO-8859-1"%>
+ <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <head>
     <meta charset="utf-8">
@@ -11,7 +12,36 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
     <script src="${pageContext.request.contextPath}/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/bootstrap.min.js"></script>
+ <script type="text/javascript">
+        function doAjaxPhasePost() {
+        // get the form values
+        var phase = $('#phase').val();
+        var button = $('#button1').text();
+        if(button=="on"){
+        	 $("#button1").text("off");
+        }else{
+        	 $("#button1").text("on");
 
+        }
+        $.ajax({
+        type: "POST",
+        url: "./smart-light-phase-submit.htm",
+        data: "phaseId=" + phase + "&button=" + button,
+        });
+        }
+        
+        function doAjaxPhaseIntensityPost() {
+            // get the form values
+            var phase = $('#phase1').val();
+            var intensity = $('#intensity').val();
+            $.ajax({
+            type: "POST",
+            url: "./smart-light-phase-intensity-submit.htm",
+            data: "phaseName=" + phase + "&intensity=" + intensity,
+
+            });
+        }
+        </script>
 </head>
 
 <body>
@@ -35,27 +65,28 @@
 <div class="col-lg-12">	
 
 	<div class="col-lg-6">
-		<form action="#" id="form1" onsubmit="">
+		<form:form method="POST" id="form1">
 			<div class="panel panel-primary">
-			<div class="panel-heading"><b>Light On/Off</b></div>
+			<div class="panel-heading"><b>Actions Light On/Off</b></div>
 				<div class="panel-body">
 				<p style=" margin-left:15px;"><input type="checkbox" name="sunrise" value="onoff">&nbsp;On/Off According to Sunrise and Sunset</p>
 					<div class="col-lg-6">
 					<label class="font-noraml">Select Phase</label>
-					<select class="form-control" >
-					<option value="allpahse">All Phase</option>
+					<select class="form-control" id="phase">
+					<option value="allphase">All Phase</option>
 					<option value="phase1">Phase 1</option>
 					<option value="phase2">Phase 2</option>
 					</select>
 					</div>
 					<div class="col-lg-6">
-					<button type="button" class=" btn btn-primary  dim col-lg-5" style=" margin-top:20px;"><i class="fa fa-lightbulb-o"></i> On/Off</button>
+					<!-- <input type="submit" value="On/Off" class=" btn btn-primary  dim col-lg-5" name="submit" style=" margin-top:20px;"/> -->
+					 <button type="button" id="button1" class=" btn btn-primary  dim col-lg-5" onclick="doAjaxPhasePost()"  style=" margin-top:20px;"><i class="fa fa-lightbulb-o"></i>on</button>
 					</div>
 				</div>
 			</div>
-		</form>
+		</form:form>
 		
-		<form action="#" id="form1" onsubmit="">
+		<form:form method="POST" id="form2">
 					<div class="panel panel-primary">
 			<div class="panel-heading"><b>Intensity Of Light</b></div>
 				<div class="panel-body">
@@ -63,28 +94,28 @@
 				
 				<div class="col-lg-6">
 				<label class="font-noraml">Select Phase</label>
-				<select class="form-control">
+				<select class="form-control" id="phase1">
 					<option value="allphase">All Phase</option>
 					<option value="phase1">Phase 1</option>
 					<option value="phase2">Phase 2</option>
 				</select>
 			
 			<label class="font-noraml">Select Intensity Percentage</label>
-				<select class="form-control">
+				<select class="form-control" id="intensity">
 					<option value="100">100</option>
 					<option value="75">75</option>
 					<option value="50">50</option>
-					<option value="25">50</option>
+					<option value="25">25</option>
 				</select>
 							</div>
 					<div class="col-lg-6">
-<button type="button" class="btn btn-outline btn-warning dim m-t-l" style=" margin-top:50px;"><i class="fa fa-lightbulb-o"></i> Dim</button>
+<button type="button" class="btn btn-outline btn-warning dim m-t-l" onclick="doAjaxPhaseIntensityPost()" style=" margin-top:50px;"><i class="fa fa-lightbulb-o"></i> Dim</button>
 
 			</div>
 				</div>
 			</div>	
 
-			</form>
+			</form:form>
 	
 
 
@@ -285,7 +316,7 @@
 								<td class="text-navy"><a class="btn btn-xs  btn-primary" href="#">Download Report</a></td>
                             </tr>
                             <tr>
-                                <td>Jun 04 2016</td>
+                                <td>Jun 03 2016</td>
 								<td>${allPhase.power}</td>
                                 <td>${allPhase.numOfLamp}</td>
                                 <td>${allPhase.errorLamp}</td>

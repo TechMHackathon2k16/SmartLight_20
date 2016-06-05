@@ -8,12 +8,13 @@ public class Phase {
 	private Integer voltage;
 	private Double current;
 	private Double power;
+	private String button;
 
 	public Phase() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Phase(String phaseId, Integer numOfLamp, Integer errorLamp, Integer voltage, Double current, Double power) {
+	public Phase(String phaseId, Integer numOfLamp, Integer errorLamp, Integer voltage, Double current, Double power, String button) {
 		super();
 		this.phaseId = phaseId;
 		this.numOfLamp = numOfLamp;
@@ -21,6 +22,7 @@ public class Phase {
 		this.voltage = voltage;
 		this.current = current;
 		this.power = power;
+		this.button = button;
 	}
 
 	public String getPhaseId() {
@@ -69,6 +71,14 @@ public class Phase {
 
 	public void setPower(Double power) {
 		this.power = power;
+	}
+	
+	public String getButton() {
+		return button;
+	}
+	
+	public void setButton(String button) {
+		this.button = button;
 	}
 
 	@Override

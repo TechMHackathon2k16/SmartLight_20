@@ -14,10 +14,14 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import in.smartlight.device.bean.Action;
 import in.smartlight.device.bean.Phase;
+import in.smartlight.device.utils.KafkaUtils;
 
 @Controller
 public class SmartLightController {
@@ -46,9 +50,9 @@ public class SmartLightController {
 	
 	@PostConstruct
 	public void init(){
-		phase1 = new Phase("Phase1", 4, 0, 240, 0.01, 100.0);
-		phase2 = new Phase("Phase2", 4, 0, 240, 0.01, 100.0);
-		allPhase = new Phase("All Phase", 8, 0,  240, 0.01, 200.0);
+		phase1 = new Phase("Phase1", 2, 1, 240, 0.01, 100.0, null);
+		phase2 = new Phase("Phase2", 3, 0, 240, 0.01, 100.0, null);
+		allPhase = new Phase("All Phase", 5, 1,  240, 0.01, 200.0, null);
 		allAction = new Action("All Phase", 100, true);
 		action1 = new Action("Phase1", 100, true);
 		action2 = new Action("Phase2", 100, true);
@@ -78,5 +82,27 @@ public class SmartLightController {
 		}
 		
 	}
+	
+	@RequestMapping(value="/smart-light-phase-submit.htm")  
+	public @ResponseBody String processPhase(@ModelAttribute("phase") Phase phase,BindingResult result) {  
+		
+		String phaseId=phase.getPhaseId();
+		String button=phase.getButton();
+		String message = "state"+":"+phaseId+":"+button;
+		System.out.println("come inside the mehtod processPhase:"+message);
+		KafkaUtils.sendMessage(message);
+		
+        return "index";  
+    }  
+
+	@RequestMapping(value="/smart-light-phase-intensity-submit.htm")  
+	public @ResponseBody String processPhaseIntensity(@ModelAttribute("action") Action action,BindingResult result) {  
+		String phaseName=action.getPhaseName();
+		Integer intensity=action.getIntensity();
+		String message = "dim"+":"+phaseName+":"+intensity;
+		System.out.println("come inside the mehtod processPhaseIntensity:"+message);
+		KafkaUtils.sendMessage(message);
+        return "index";  
+    }  
 
 }
